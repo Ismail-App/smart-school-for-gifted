@@ -78,6 +78,7 @@ export default function Home() {
           </div>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#features" className="hover:text-foreground">المزايا</a>
+            <a href="#ai" className="hover:text-foreground">ميزات ذكية</a>
             <a href="#assess" className="hover:text-foreground">الاختبارات</a>
             <a href="#tracks" className="hover:text-foreground">المسارات</a>
             <a href="#trust" className="hover:text-foreground">المرجعيات</a>
@@ -139,6 +140,16 @@ export default function Home() {
             <Feature title="مسارات نوعية" desc="برامج إثرائية ومشاريع تطبيقية مرتبطة بالاهتمامات والقدرات الفريدة لكل طالب." icon={<Star className="text-primary" />} />
             <Feature title="دعم نفسي واجتماعي" desc="مواد وإرشاد مستند إلى أطر متخصصة لاحتياجات الطلبة الموهوبين." icon={<Users className="text-primary" />} />
             <Feature title="شهادات موثوقة" desc="شهادات رقمية برموز تحقق (QR) ومسار دبلوم في التميّز والإبداع العلمي والأكاديمي." icon={<BarChart3 className="text-primary" />} />
+          </div>
+        </section>
+
+        <section id="ai" className="space-y-8 py-10">
+          <h2 className="text-2xl font-bold md:text-3xl">ميزات ذكية</h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Feature title="مساعد شخصي" desc="محادثة إرشادية تقترح أهدافًا وأنشطة مناسبة لعمر الطالب." icon={<Sparkles className="text-accent" />} />
+            <Feature title="توصيات مسارات" desc="خوارزمية تقارن الاهتمامات بالأداء وتقترح خطة أسبوعية." icon={<Star className="text-accent" />} />
+            <Feature title="لوحة تقدم" desc="مؤشرات قياس ذكية وتنبيهات للأهل والمعلمين." icon={<BarChart3 className="text-accent" />} />
+            <Feature title="ملف إنجاز رقمي" desc="أعمال الطالب وشهاداته وروابط التحقق في صفحة واحدة." icon={<Users className="text-accent" />} />
           </div>
         </section>
 
