@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Sparkles, ArrowLeft, CheckCircle2, Star, Users, BarChart3 } from "lucide-react";
 
 export default function Home() {
@@ -73,14 +74,14 @@ export default function Home() {
         <section id="tracks" className="space-y-8 py-10">
           <h2 className="text-2xl font-bold md:text-3xl">المسارات والبرامج</h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <TrackCard title="STEM والبحث العلمي" desc="فيزياء، كيمياء، أحياء، علوم الحاسوب، أساليب البحث والتجريب، مشاريع ومسابقات علمية." />
-            <TrackCard title="الرياضيات والأولمبياد" desc="تدريب منهجي على حل المسائل، تفكير تجريدي، ومسابقات مثل كانجارو وBebras." />
-            <TrackCard title="البرمجة والذكاء الاصطناعي" desc="خوارزميات، برمجة تطبيقات، ذكاء اصطناعي، مشاريع عملية وتأثير مجتمعي." />
+            <TrackCard title="البرمجة والذكاء الاصطناعي" desc="خوارزميات، برمجة تطبيقات، ذكاء اصطناعي، مشاريع عملية وتأثير مجتمعي." priorityLabel="أولوية" />
+            <TrackCard title="الرياضيات والأولمبياد" desc="تدريب منهجي على حل المسائل، تفكير تجريدي، ومسابقات مثل كانجارو وBebras." priorityLabel="أولوية" />
+            <TrackCard title="STEM والبحث العلمي" desc="فيزياء، كيمياء، أحياء، علوم الحاسوب، أساليب البحث والتجريب، مشاريع ومسابقات علمية." priorityLabel="أولوية" />
             <TrackCard title="الريادة والابتكار" desc="تصميم المشاريع، التفكير التصميمي، نماذج العمل، وعروض المستثمرين." />
             <TrackCard title="الفنون والتصميم" desc="تصميم بصري وصوتي، سرد رقمي، وحلول إبداعية متعددة الوسائط." />
             <TrackCard title="القيادة والأثر الاجتماعي" desc="مهارات القيادة، التواصل، المشاريع المجتمعية، والمناظرات." />
           </div>
-          <p className="text-sm text-muted-foreground">بعد إكمال مسارات محدّدة بنجاح، يمكن للطالب التقدّم لاختبار نهائي والحصول على «دبلوم التميّز والإبداع العلمي والأكاديمي».</p>
+          <p className="text-sm text-muted-foreground">بعد إكمال مسارات محدّدة بنجاح، يمكن للطالب التقدّم لاختبار نهائي والحصول على «دبلوم التميّز والإبداع العلمي والأكاديمي» (عربي/إنجليزي + QR).</p>
         </section>
 
         <section id="trust" className="space-y-6 py-12">
@@ -124,10 +125,13 @@ function Feature({ title, desc, icon }: { title: string; desc: string; icon: Rea
   );
 }
 
-function TrackCard({ title, desc }: { title: string; desc: string }) {
+function TrackCard({ title, desc, priorityLabel }: { title: string; desc: string; priorityLabel?: string }) {
   return (
     <div className="rounded-xl border p-5">
-      <h3 className="mb-1 font-semibold">{title}</h3>
+      <div className="mb-1 flex items-center gap-2">
+        <h3 className="font-semibold">{title}</h3>
+        {priorityLabel ? <Badge className="bg-accent text-accent-foreground">{priorityLabel}</Badge> : null}
+      </div>
       <p className="text-sm text-muted-foreground">{desc}</p>
     </div>
   );
