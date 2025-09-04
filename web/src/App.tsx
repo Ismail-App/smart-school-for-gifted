@@ -1,8 +1,61 @@
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Sparkles, ArrowLeft, CheckCircle2, Star, Users, BarChart3 } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
+import Screening, { ScreeningResult } from "@/components/Screening";
+import CertificatePreview from "@/components/CertificatePreview";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [authMsg, setAuthMsg] = useState<string>("");
+  const [loggedEmail, setLoggedEmail] = useState<string>("");
+
+  const [screeningOpen, setScreeningOpen] = useState(false);
+  const [certOpen, setCertOpen] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.email) setLoggedEmail(data.user.email);
+    });
+  }, []);
+
+  const signIn = async () => {
+    setAuthMsg("");
+    const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
+    if (error) setAuthMsg(error.message);
+    else setAuthMsg("تم إرسال رابط الدخول إلى بريدك الإلكتروني.");
+  };
+
+  const onScreeningComplete = async (r: ScreeningResult) => {
+    setScreeningOpen(false);
+    try {
+      const u = await supabase.auth.getUser();
+      const userId = u.data.user?.id ?? null;
+      if (userId) {
+        await supabase.from("screenings").insert({
+          user_id: userId,
+          fluency: r.fluency,
+          flexibility: r.flexibility,
+          novelty: r.novelty,
+          total: r.total,
+          recommendations: r.recommendations,
+        });
+        alert("تم حفظ نتيجة الفحص بنجاح.");
+      } else {
+        alert("تم إكمال الفحص. لتخزين النتائج، يرجى تسجيل الدخول بالبريد الإلكتروني.");
+      }
+    } catch (e) {
+      console.warn(e);
+      alert("تم إكمال الفحص. (تعذّر الحفظ: تأكد من تهيئة جدول Supabase)");
+    }
+  };
+
+  const certificateId = useMemo(() => crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2), []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md">
@@ -18,8 +71,23 @@ export default function Home() {
             <a href="#trust" className="hover:text-foreground">المرجعيات</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">تسجيل وليّ الأمر</Button>
-            <Button size="sm">تسجيل الطالب</Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">{loggedEmail ? `حساب: ${loggedEmail}` : "تسجيل بالبريد"}</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>تسجيل الدخول عبر البريد الإلكتروني</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <Label htmlFor="email">البريد الإلكتروني</Label>
+                  <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <Button onClick={signIn}>إرسال رابط الدخول</Button>
+                  {authMsg && <div className="text-sm text-muted-foreground">{authMsg}</div>}
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Button size="sm" onClick={() => setCertOpen(true)}>معاينة شهادة</Button>
           </div>
         </div>
       </header>
@@ -66,7 +134,7 @@ export default function Home() {
                 <h3 className="text-lg font-semibold">فحص إبداعي قصير (5 دقائق)</h3>
                 <p className="text-sm text-muted-foreground">نشاط سريع لقياس الطلاقة والمرونة وتوليد الأفكار، بهدف التوجيه الأولي لمسارات الإثراء.</p>
               </div>
-              <Button size="sm">بدء الفحص</Button>
+              <Button size="sm" onClick={() => setScreeningOpen(true)}>بدء الفحص</Button>
             </div>
           </div>
         </section>
@@ -109,6 +177,25 @@ export default function Home() {
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
         © {new Date().getFullYear()} المدرسة الذكية للموهوبين — منصة عربية لرعاية الموهبة.
       </footer>
+
+      {/* Dialogs */}
+      <Dialog open={screeningOpen} onOpenChange={setScreeningOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>فحص إبداعي قصير</DialogTitle>
+          </DialogHeader>
+          <Screening onComplete={onScreeningComplete} />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={certOpen} onOpenChange={setCertOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle>معاينة شهادة</DialogTitle>
+          </DialogHeader>
+          <CertificatePreview studentName={loggedEmail || "طالب/ة"} programName="البرمجة والذكاء الاصطناعي" certificateId={certificateId} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
