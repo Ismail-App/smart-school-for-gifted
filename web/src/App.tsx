@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Sparkles, ArrowLeft, CheckCircle2, Star, Users, BarChart3 } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase, isDemo } from "@/lib/supabaseClient";
 import Screening, { ScreeningResult } from "@/components/Screening";
 import CertificatePreview from "@/components/CertificatePreview";
 
@@ -25,6 +25,10 @@ export default function Home() {
 
   const signIn = async () => {
     setAuthMsg("");
+    if (isDemo) {
+      setAuthMsg("وضع عرض تجريبي على scout.site: تسجيل الدخول مُعطّل هنا. استخدم النسخة المحلية أو أضف مفاتيح Supabase.");
+      return;
+    }
     const { error } = await supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } });
     if (error) setAuthMsg(error.message);
     else setAuthMsg("تم إرسال رابط الدخول إلى بريدك الإلكتروني.");
@@ -33,6 +37,14 @@ export default function Home() {
   const onScreeningComplete = async (r: ScreeningResult) => {
     setScreeningOpen(false);
     try {
+      if (isDemo) {
+        const key = "screenings";
+        const arr = JSON.parse(localStorage.getItem(key) || "[]");
+        arr.push({ ...r, ts: Date.now() });
+        localStorage.setItem(key, JSON.stringify(arr));
+        alert("تم إكمال الفحص وحفظ النتيجة محليًا (وضع العرض التجريبي).");
+        return;
+      }
       const u = await supabase.auth.getUser();
       const userId = u.data.user?.id ?? null;
       if (userId) {
@@ -92,6 +104,11 @@ export default function Home() {
         </div>
       </header>
 
+      {isDemo && (
+        <div className="w-full bg-accent/10 py-2 text-center text-xs text-accent-foreground">
+          وضع العرض التجريبي على scout.site — تسجيل الدخول معطّل والنتائج تُحفظ محليًا فقط.
+        </div>
+      )}
       <main className="container mx-auto px-4">
         <section className="relative flex flex-col items-start gap-6 py-14 md:py-20">
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-primary/10" />
