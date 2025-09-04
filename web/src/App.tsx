@@ -110,24 +110,26 @@ export default function Home() {
         </div>
       )}
       <main className="container mx-auto px-4">
-        <section className="relative flex flex-col items-start gap-6 py-14 md:py-20">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-primary/10" />
-          <h1 className="font-serif text-3xl font-bold leading-[1.2] md:text-5xl lg:text-6xl">
-            المرجعية العربية للكشف ورعاية الطلبة الموهوبين (12–18)
+        <section className="relative flex flex-col items-start gap-6 py-16 md:py-24">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_40%_at_70%_20%,theme(colors.accent)/15%,transparent_70%),linear-gradient(to_bottom,transparent,theme(colors.primary)/8%)]" />
+          <h1 className="text-balance font-serif text-4xl font-extrabold leading-[1.1] tracking-tight md:text-6xl lg:text-7xl">
+            نصنع مسارات تميّز للموهوبين العرب
           </h1>
-          <p className="max-w-2xl text-muted-foreground md:text-lg">
-            منصة متكاملة لتشخيص نقاط القوة، بناء مسارات إثرائية نوعية، تقديم دعم نفسي وأكاديمي، وإصدار شهادات رقمية موثوقة وفق أفضل الممارسات العالمية.
+          <p className="max-w-2xl text-base text-muted-foreground md:text-lg">
+            منصة ذكية توجّه الطالب من الكشف إلى الإنجاز: فحوصات تمهيدية، توصيات شخصية، برامج إثرائية، وشهادات رقمية موثوقة.
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <Button size="lg" className="group">
-              <span>ابدأ الآن</span>
-              <ArrowLeft className="transition-transform group-hover:-translate-x-0.5" />
-            </Button>
-            <Button variant="outline" size="lg">أنا معلّم/مرشد</Button>
+            <a href="#assess">
+              <Button size="lg" className="group bg-primary text-primary-foreground">
+                <span>ابدأ الآن</span>
+                <ArrowLeft className="transition-transform group-hover:-translate-x-0.5" />
+              </Button>
+            </a>
+            <a href="#tracks">
+              <Button variant="outline" size="lg">تصفّح المسارات</Button>
+            </a>
           </div>
-          <div className="mt-4 text-xs text-muted-foreground">
-            مجاني للتجربة • يدعم العربية بالكامل • تصميم ملائم للهواتف
-          </div>
+          <div className="mt-2 text-xs text-muted-foreground">نسخة استعراضية على scout.site — بدون تسجيل دخول.</div>
         </section>
 
         <section id="features" className="space-y-8 py-10">
