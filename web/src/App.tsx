@@ -73,8 +73,8 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/70 backdrop-blur-md">
         <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-3">
           <div className="flex items-center gap-2 text-primary">
-            <Sparkles size={18} />
-            <span className="font-semibold">المدرسة الذكية للموهوبين</span>
+            <img src="/aatc.png" alt="شعار الأكاديمية العربية للموهبة والإبداع" className="h-7 w-7 rounded" />
+            <span className="font-semibold">الأكاديمية العربية للموهبة والإبداع</span>
           </div>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#features" className="hover:text-foreground">المزايا</a>
@@ -192,7 +192,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} المدرسة الذكية للموهوبين — منصة عربية لرعاية الموهبة.
+        © {new Date().getFullYear()} الأكاديمية العربية للموهبة والإبداع — منصة عربية لرعاية الموهبة.
       </footer>
 
       {/* Dialogs */}
